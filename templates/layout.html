@@ -22,7 +22,7 @@
   <script src="{{base}}app.js" defer></script>
   <script src="{{base}}widgets/gallery.js" defer></script>
 </head>
-<body>
+<body data-base="{{base}}">
   <!-- class kept for backward compatibility; hidden by base.css -->
   <div class="bg-hud" aria-hidden="true"></div>
 
@@ -64,9 +64,16 @@
       </div>
     </aside>
 
+    <div class="scrim" id="scrim" aria-hidden="true"></div>
+
     <main class="main" id="main">
-      <div class="hudbar" aria-hidden="true">
+      <div class="hudbar">
         <div class="hudbar-left">
+          <button class="icon-btn icon-btn-sm mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Открыть меню" title="Меню">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16"/>
+            </svg>
+          </button>
           <span class="hud-where">{{where}}</span>
           <span class="hud-desc">{{desc}}</span>
         </div>
@@ -76,7 +83,7 @@
         </div>
       </div>
 
-      <div class="content-card">
+      <div class="content-card" id="contentCard">
         {{content}}
       </div>
 

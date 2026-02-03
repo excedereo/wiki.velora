@@ -10,6 +10,8 @@
   }
 
   function mount(el) {
+    if (el.getAttribute("data-wgallery-mounted") === "1") return;
+    el.setAttribute("data-wgallery-mounted", "1");
     const itemsEnc = el.getAttribute("data-items") || "";
     let items = [];
     try { items = JSON.parse(decodeURIComponent(itemsEnc)); } catch {}
@@ -201,6 +203,8 @@
   function init() {
     document.querySelectorAll(".wgallery").forEach(mount);
   }
+
+  try { window.WGALLERY_INIT = init; } catch {}
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

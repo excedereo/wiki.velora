@@ -116,3 +116,12 @@ a,button{ -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce){
   *{ transition: none !important; scroll-behavior: auto !important; }
 }
+
+
+/* Custom selection color */
+::selection{
+  background: #195e31;
+}
+::-moz-selection{
+  background: #195e31;
+}

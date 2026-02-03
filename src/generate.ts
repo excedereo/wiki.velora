@@ -251,7 +251,7 @@ function renderNav(tree: SectionNode, activePath: string = ""): string {
     return "file";
   }
 
-  function renderIcon(node: SectionNode): string {
+  function renderSectionIcon(node: SectionNode): string {
     const raw = typeof node.meta?.icon === "string" ? String(node.meta.icon).trim() : "";
     if (raw) return renderIconAny(raw, "nav-icon");
     return `<span class="nav-icon" aria-hidden="true">${iconSvg(inferIconName(node.slug, node.title))}</span>`;
@@ -270,11 +270,12 @@ function renderNav(tree: SectionNode, activePath: string = ""): string {
 
   function sectionHead(node: SectionNode, depth: number, isOpen: boolean, hasKids: boolean) {
     const caret = hasKids
-        ? `<span class="nav-caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5 16 12l-7 6.5"/></svg></span>`
-        : "";
+      ? `<span class="nav-caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5 16 12l-7 6.5"/></svg></span>`
+      : "";
     const ariaExpanded = hasKids ? ` aria-expanded="${isOpen ? "true" : "false"}"` : "";
-    const href = node.indexPage ? node.indexPage.path : node.path; // важно: клик ведёт на index
-    return `<a class="nav-link nav-section d-${depth}" href="${esc(prettyHref(href))}" data-nav-section="${encodeURI(node.path)}"${ariaExpanded}>${renderIcon(node)}<span class="nav-text">${esc(node.title)}</span>${caret}</a>`;
+
+    const href = node.indexPage ? node.indexPage.path : node.path;
+    return `<a class="nav-link nav-section d-${depth}" href="${esc(prettyHref(href))}" data-nav-section="${encodeURI(node.path)}"${ariaExpanded}>${renderSectionIcon(node)}<span class="nav-text">${esc(node.title)}</span>${caret}</a>`;
   }
 
   function label(title: string, depth: number) {
@@ -282,16 +283,18 @@ function renderNav(tree: SectionNode, activePath: string = ""): string {
   }
 
   function nodeHtml(node: SectionNode | PageNode, depth: number): string {
-    if (node.type === "page") return link(node.title, node.path, depth, "nav-page", renderPageIcon(node));
+    if (node.type === "page") {
+      return link(node.title, node.path, depth, "nav-page", renderPageIcon(node));
+    }
 
     const hasKids = node.children.length > 0;
     const isOpen = !!active && (active === node.path || active.startsWith(node.path + "/"));
 
     const head = node.indexPage
-        ? sectionHead(node, depth, isOpen, hasKids)
-        : label(node.title, depth);
+      ? sectionHead(node, depth, isOpen, hasKids)
+      : label(node.title, depth);
 
-    const kids = node.children.map(c => nodeHtml(c, depth + 1)).join("");
+    const kids = node.children.map(c => nodeHtml(c as any, depth + 1)).join("");
     const kidsWrap = kids ? `<div class="nav-children">${kids}</div>` : "";
 
     const stateCls = hasKids ? (isOpen ? "is-open" : "is-collapsed") : "is-leaf";
@@ -301,7 +304,7 @@ function renderNav(tree: SectionNode, activePath: string = ""): string {
     return wrap;
   }
 
-  return `<nav class="nav">${tree.children.map(n => nodeHtml(n, 0)).join("")}</nav>`;
+  return `<nav class="nav">${tree.children.map(n => nodeHtml(n as any, 0)).join("")}</nav>`;
 }
 
 // ---------- file writing ----------
