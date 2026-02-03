@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{title}}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{base}}css/base.css" />
+  <link rel="stylesheet" href="{{base}}css/layout.css" />
+  <link rel="stylesheet" href="{{base}}css/nav.css" />
+  <link rel="stylesheet" href="{{base}}css/page.css" />
+</head>
+<body>
+  <div class="shell" id="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <a class="brand" href="{{base}}" title="На главную">
+          <img class="brand-logo" src="{{base}}assets/logo-color.svg" alt="Logo" />
+          <span class="brand-text">Velora Wiki</span>
+        </a>
+      </div>
+      <div class="sidebar-content">{{nav}}</div>
+    </aside>
+    <main class="main"><div class="content-card">{{content}}</div></main>
+  </div>
+</body>
+</html>

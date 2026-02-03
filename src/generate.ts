@@ -33,9 +33,10 @@ function escapeHtml(s: string) {
   }[c] as string));
 }
 
-function normalizeBase(b: string) {
+function normalizeBase(b: string): string {
   b = String(b || "").trim();
-  if (!b) return "";
+  // Default to "/" so asset links remain absolute on local preview and custom domains.
+  if (!b) return "/";
   if (!b.startsWith("/")) b = "/" + b;
   if (!b.endsWith("/")) b = b + "/";
   return b;
@@ -53,6 +54,13 @@ function prettyHref(urlPath: string): string {
   if (!p || p === "/") return withBase("/");
   return withBase(p.endsWith("/") ? p : p + "/");
 }
+
+function applyBaseToHtml(html: string): string {
+  // Rewrite absolute root links like href="/x" -> href="/wiki.velora/x" for GitHub Pages.
+  if (!BASE_PATH || BASE_PATH === "/") return html;
+  return String(html || "").replace(/\b(href|src)=(["'])\/(?!\/)/g, `$1=$2${BASE_PATH}`);
+}
+
 
 // ---------- icon + header helpers (copied from server with small tweaks) ----------
 function safeCssSize(input: unknown): string {
@@ -294,7 +302,8 @@ copyDir(path.resolve(ROOT_DIR, "public"), OUT_DIR);
 // create main pages
 for (const [urlPathRaw, node] of routes.entries()) {
   const urlPath = urlPathRaw || "/";
-  const { html: bodyHtml, meta } = renderMarkdown(node.filePath);
+  const { html: bodyHtmlRaw, meta } = renderMarkdown(node.filePath);
+  const bodyHtml = applyBaseToHtml(bodyHtmlRaw);
   const pageTitle = (meta.title as string) || node.title;
 
   const header = renderHeader(meta as any, pageTitle);

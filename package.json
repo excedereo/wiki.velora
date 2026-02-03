@@ -6,7 +6,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "build:pages": "tsx src/generate.ts",
+    "build:pages": "node dist/generate.js",
     "preview": "npx serve site"
   },
   "dependencies": {

@@ -13,6 +13,36 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, "..");
 
+// Same base-path logic as the static generator.
+// In GitHub Pages project sites, assets & links must be prefixed with "/<repo>/".
+const BASE_PATH = normalizeBase(process.env.BASE_PATH || "");
+
+function normalizeBase(b: string): string {
+  b = String(b || "").trim();
+  // Default to "/" so asset links remain absolute on local preview and custom domains.
+  if (!b) return "/";
+  if (!b.startsWith("/")) b = "/" + b;
+  if (!b.endsWith("/")) b = b + "/";
+  return b;
+}
+function withBase(url: string): string {
+  const u = String(url || "");
+  if (!u) return u;
+  if (u.startsWith("http://") || u.startsWith("https://") || u.startsWith("//")) return u;
+  if (u.startsWith("/")) return BASE_PATH + u.slice(1);
+  return BASE_PATH + u;
+}
+function prettyHref(urlPath: string): string {
+  const p = String(urlPath || "");
+  if (!p || p === "/") return withBase("/");
+  return withBase(p.endsWith("/") ? p : p + "/");
+}
+function applyBaseToHtml(html: string): string {
+  if (!BASE_PATH || BASE_PATH === "/") return html;
+  return String(html || "").replace(/\b(href|src)=(["'])\/(?!\/)/g, `$1=$2${BASE_PATH}`);
+}
+
+
 const app = express();
 app.use(express.static(path.resolve(ROOT_DIR, "public")));
 
@@ -175,7 +205,8 @@ function renderPageIcon(node: PageNode): string {
   return `<span class="nav-icon" aria-hidden="true">${iconSvg(inferPageIconName(node.slug, node.title))}</span>`;
 }
 function link(title: string, href: string, depth: number, cls: string, extra: string = "") {
-    return `<a class="nav-link ${cls} d-${depth}" href="${encodeURI(href)}">${extra}<span class="nav-text">${esc(title)}</span></a>`;
+    const outHref = prettyHref(href);
+    return `<a class="nav-link ${cls} d-${depth}" href="${esc(outHref)}">${extra}<span class="nav-text">${esc(title)}</span></a>`;
   }
 
   function sectionHead(node: SectionNode, depth: number, isOpen: boolean, hasKids: boolean) {
@@ -313,6 +344,7 @@ app.get("/", (req: Request, res: Response) => {
     content: "<h1>Wiki</h1><p>Создай первую страницу в папке content</p>",
     where: "Wiki",
     desc: "",
+    base: BASE_PATH,
   });
   res.send(html);
 });
@@ -329,11 +361,13 @@ app.get("*", (req: Request, res: Response) => {
       content: "<h1>404</h1><p>Страница не найдена</p>",
       where: "Wiki / 404",
       desc: "",
+      base: BASE_PATH,
     });
     return res.status(404).send(html);
   }
 
-  const { html: bodyHtml, meta } = renderMarkdown(node.filePath);
+  const { html: bodyHtmlRaw, meta } = renderMarkdown(node.filePath);
+  const bodyHtml = applyBaseToHtml(bodyHtmlRaw);
   const pageTitle = (meta.title as string) || node.title;
 
   const header = renderHeader(meta as any, pageTitle);
@@ -364,6 +398,7 @@ app.get("*", (req: Request, res: Response) => {
     content,
     where: escapeHtml(where),
     desc: escapeHtml(desc),
+    base: BASE_PATH,
   });
 
   res.send(html);
