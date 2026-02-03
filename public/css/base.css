@@ -1,0 +1,118 @@
+/*
+  Clean redesign base.
+  Goal: stable design system + no blend-mode artifacts.
+*/
+
+:root{
+  /* Layout */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --sidebar-w: 320px;
+  --sidebar-w-collapsed: 82px;
+  --content-max: 100%;
+
+  /* Dark theme */
+  /* closer to old: deep green-ish dark */
+  --bg: #050806;
+  --bg2: #070d08;
+  --surface: rgba(255,255,255,0.07);
+  --surface2: rgba(255,255,255,0.05);
+
+  --text: rgba(241,245,249,0.92);
+  --muted: rgba(241,245,249,0.62);
+
+  --border: rgba(148,163,184,0.18);
+  --border2: rgba(148,163,184,0.12);
+
+  --accent: #34d399;
+  --accent2: #22c55e;
+
+  --shadow: 0 18px 44px rgba(0,0,0,0.45);
+  --shadow2: 0 10px 26px rgba(0,0,0,0.32);
+
+  --hover: rgba(52,211,153,0.10);
+  --active: rgba(52,211,153,0.16);
+
+  --codeBg: rgba(52,211,153,0.12);
+  --codeBorder: rgba(52,211,153,0.22);
+}
+
+/* Light theme */
+html[data-theme="light"]{
+  --bg: #f7f8fc;
+  --bg2: #ffffff;
+  --surface: rgba(255,255,255,0.95);
+  --surface2: rgba(255,255,255,0.88);
+
+  --text: #0f172a;
+  --muted: #475569;
+
+  --border: #e5e7eb;
+  --border2: #eef2f7;
+
+  --shadow: 0 12px 32px rgba(2,6,23,0.08);
+  --shadow2: 0 8px 20px rgba(2,6,23,0.08);
+
+  --hover: #ecfdf5;
+  --active: #d1fae5;
+
+  --codeBg: #ecfdf5;
+  --codeBorder: #a7f3d0;
+}
+
+/* Reset */
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: "Unbounded", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 600px at 20% 10%, rgba(52,211,153,0.18), transparent 60%),
+    radial-gradient(900px 600px at 78% 14%, rgba(34,197,94,0.14), transparent 62%),
+    linear-gradient(180deg, var(--bg2), var(--bg));
+  background-attachment: fixed, fixed, fixed;
+}
+
+/* Subtle grid overlay */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(52,211,153,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(52,211,153,0.10) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.10;
+}
+html[data-theme="light"] body::before{ opacity: 0.06; }
+
+/* Legacy HUD overlay removed (kept class for compatibility) */
+.bg-hud{ display:none; }
+
+/* Accessibility */
+:focus{ outline:none; }
+:focus-visible{
+  outline: 2px solid rgba(52,211,153,0.60);
+  outline-offset: 2px;
+}
+
+*{ -webkit-tap-highlight-color: transparent; }
+a,button{ -webkit-tap-highlight-color: transparent; }
+
+/* Inline gradient text (macro: <gradient:...:...>Text</gradient>) */
+.gradient-text{
+  --g1: var(--accent);
+  --g2: var(--accent2);
+  display: inline-block;
+  background-image: linear-gradient(90deg, var(--g1), var(--g2));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; scroll-behavior: auto !important; }
+}

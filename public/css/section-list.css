@@ -1,0 +1,79 @@
+/*
+  Section listing cards (index pages).
+*/
+
+.sec-list{
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border2);
+}
+
+.sec-head{
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  opacity: .9;
+}
+
+.sec-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.sec-card{
+  display:block;
+  text-decoration:none;
+  color: inherit;
+  border-radius: var(--radius);
+  border: 1px solid var(--border2);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  box-shadow: var(--shadow2);
+  padding: 12px 12px 14px 12px;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+  overflow: hidden;
+  background-clip: padding-box;
+}
+html[data-theme="light"] .sec-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+}
+
+.sec-card:hover{
+  transform: translateY(-1px);
+  background: var(--hover);
+  border-color: rgba(52,211,153,0.22);
+}
+
+.sec-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.sec-badge{
+  font-size: 10px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(52,211,153,0.40);
+  background: rgba(52,211,153,0.10);
+  opacity: .9;
+}
+.sec-meta{
+  font-size: 10px;
+  letter-spacing: .6px;
+  opacity: .65;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sec-title{
+  margin-top: 10px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  opacity: .92;
+}

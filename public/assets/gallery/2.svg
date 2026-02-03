@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071312"/>
+      <stop offset="1" stop-color="#050b0a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <g opacity="0.9"><line x1="1329.7" y1="639.8" x2="1616.4" y2="432.2" stroke="rgba(52,211,153,0.142)" stroke-width="4.9" /><line x1="871.6" y1="208.0" x2="1515.4" y2="261.4" stroke="rgba(52,211,153,0.114)" stroke-width="2.6" /><line x1="489.1" y1="265.6" x2="1209.0" y2="513.0" stroke="rgba(52,211,153,0.154)" stroke-width="4.2" /><line x1="511.8" y1="181.1" x2="785.1" y2="-55.2" stroke="rgba(52,211,153,0.101)" stroke-width="3.3" /><line x1="408.0" y1="602.0" x2="999.8" y2="632.2" stroke="rgba(52,211,153,0.076)" stroke-width="2.1" /><line x1="320.2" y1="92.3" x2="901.9" y2="341.6" stroke="rgba(52,211,153,0.124)" stroke-width="2.7" /><line x1="1229.7" y1="537.8" x2="1957.1" y2="741.1" stroke="rgba(52,211,153,0.134)" stroke-width="5.2" /><line x1="366.1" y1="662.2" x2="1241.3" y2="492.8" stroke="rgba(52,211,153,0.133)" stroke-width="4.9" /><line x1="538.3" y1="358.0" x2="1106.8" y2="570.4" stroke="rgba(52,211,153,0.105)" stroke-width="5.3" /><line x1="366.3" y1="595.9" x2="1201.1" y2="576.4" stroke="rgba(52,211,153,0.112)" stroke-width="5.7" /><line x1="958.0" y1="328.5" x2="1352.2" y2="240.8" stroke="rgba(52,211,153,0.127)" stroke-width="2.7" /><line x1="1252.7" y1="181.0" x2="2095.1" y2="85.8" stroke="rgba(52,211,153,0.155)" stroke-width="4.8" /><line x1="606.8" y1="349.5" x2="1280.2" y2="393.5" stroke="rgba(52,211,153,0.084)" stroke-width="2.8" /><line x1="619.0" y1="630.6" x2="1274.1" y2="418.2" stroke="rgba(52,211,153,0.140)" stroke-width="4.9" /><line x1="1252.2" y1="129.2" x2="1986.4" y2="-91.4" stroke="rgba(52,211,153,0.122)" stroke-width="3.1" /><line x1="162.6" y1="591.0" x2="481.7" y2="602.1" stroke="rgba(52,211,153,0.144)" stroke-width="3.0" /><line x1="136.8" y1="594.4" x2="661.7" y2="702.9" stroke="rgba(52,211,153,0.054)" stroke-width="3.4" /><line x1="75.0" y1="454.1" x2="378.9" y2="681.4" stroke="rgba(52,211,153,0.053)" stroke-width="4.9" /></g>
+  <rect x="40" y="40" width="1120" height="595" fill="none" stroke="rgba(110,231,183,0.25)" stroke-width="2"/>
+  <text x="60" y="605" font-family="Unbounded, Arial" font-size="44" fill="rgba(235,245,245,0.85)">GALLERY 02</text>
+</svg>

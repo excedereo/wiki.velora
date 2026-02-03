@@ -1,0 +1,258 @@
+/*
+  Clean redesign layout:
+  - calmer surfaces
+  - fixed hover clipping on buttons/links
+  - consistent spacing
+*/
+
+.shell{
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100vh;
+  transition: grid-template-columns 160ms ease;
+}
+.shell.is-collapsed{ grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+/* Sidebar */
+.sidebar{
+  padding: 14px;
+  border-right: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface), var(--surface2));
+  backdrop-filter: blur(10px);
+}
+.sidebar-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding: 6px 4px 12px 4px;
+}
+
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color: inherit;
+  min-width:0;
+}
+.brand-logo{ width:30px; height:30px; object-fit:contain; }
+.brand-text{
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.92;
+}
+
+.top-actions{ display:flex; align-items:center; gap:10px; }
+
+/* Icon buttons */
+.icon-btn{
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  box-shadow: var(--shadow2);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 44px;
+  position: relative;
+
+  /* crucial: clip hover/focus layers to circle */
+  overflow: hidden;
+  background-clip: padding-box;
+
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+html[data-theme="light"] .icon-btn{ background: rgba(255,255,255,0.92); }
+
+.icon-btn:hover{
+  transform: translateY(-1px);
+  background: var(--hover);
+  border-color: rgba(52,211,153,0.35);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.28);
+}
+.icon-btn:active{ transform: translateY(0px) scale(.98); }
+
+/* SVG icons inherit color */
+.icon-btn .i{
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .92;
+}
+.icon-btn .i-moon path{
+  fill: currentColor;
+  stroke: none;
+  opacity: .92;
+}
+
+/* Theme icon switching */
+#themeToggle .i-sun{ display:none; }
+html[data-theme="light"] #themeToggle .i-sun{ display:block; }
+html[data-theme="light"] #themeToggle .i-moon{ display:none; }
+
+/* Collapse icon switching */
+#sidebarToggle .i-chev-right{ display:none; }
+.shell.is-collapsed #sidebarToggle .i-chev-left{ display:none; }
+.shell.is-collapsed #sidebarToggle .i-chev-right{ display:block; }
+
+.sidebar-content{
+  padding: 6px 4px 4px 4px;
+  height: calc(100vh - 98px);
+  overflow:auto;
+}
+
+/* Collapse behaviour */
+.shell.is-collapsed .sidebar-content{ display:none; }
+.shell.is-collapsed .brand-text{ display:none; }
+.shell.is-collapsed .sidebar-top{ justify-content:center; }
+.shell.is-collapsed .brand{ display:none; }
+.shell.is-collapsed #themeToggle{ display:none; }
+
+/* Main */
+.main{
+  padding: 18px 18px 34px 18px;
+  min-width:0;
+  width: 100%;
+}
+
+.hudbar{
+  width: 100%;
+  margin: 0 0 12px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--border2);
+  background: linear-gradient(90deg, rgba(52,211,153,0.10), rgba(255,255,255,0.00));
+  box-shadow: var(--shadow2);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  border-radius: var(--radius);
+}
+html[data-theme="light"] .hudbar{
+  background: linear-gradient(90deg, rgba(52,211,153,0.12), rgba(255,255,255,0.92));
+}
+
+.hudbar-left{ display:flex; align-items:center; gap:10px; min-width:0; }
+.hud-where{
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  opacity: .90;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.hud-desc{
+  font-size: 11px;
+  opacity: .62;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.hud-desc:empty{ display:none; }
+
+.hud-chip{
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  padding: 6px 10px;
+  border: 1px solid rgba(52,211,153,0.40);
+  background: rgba(52,211,153,0.10);
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+.hud-title{
+  font-size: 12px;
+  opacity: .82;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.hudbar-right{ display:flex; align-items:center; gap:10px; }
+.hud-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(52,211,153,0.12);
+}
+.hud-status{
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  opacity: .72;
+  text-transform: uppercase;
+}
+
+/* Content card */
+.content-card{
+  width: 100%;
+  max-width: none;
+  background: linear-gradient(180deg, var(--surface), var(--surface2));
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+  padding: 26px 26px 20px 26px;
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  margin: 0;
+}
+
+.footer{
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 10px 4px 0 4px;
+}
+.muted{ color: var(--muted); font-size: 12px; }
+
+/* Responsive */
+@media (max-width: 860px){
+  .shell{ grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+  .shell:not(.is-collapsed){ grid-template-columns: 1fr; }
+
+  .sidebar{
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    height: calc(100vh - 24px);
+    width: min(var(--sidebar-w), calc(100vw - 24px));
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 20;
+    border-radius: var(--radius);
+  }
+
+  .shell.is-collapsed .sidebar{
+    width: var(--sidebar-w-collapsed);
+    height: auto;
+    border-radius: 999px;
+    padding: 8px;
+    box-shadow: none;
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+  }
+
+  .shell.is-collapsed .sidebar-top{ padding: 0; }
+
+  .main{ padding: 14px 12px 26px 12px; }
+  .content-card{ padding: 18px 16px; }
+}

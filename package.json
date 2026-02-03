@@ -1,0 +1,23 @@
+{
+  "name": "wiki-skeleton",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "build:pages": "tsx src/generate.ts",
+    "preview": "npx serve site"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "gray-matter": "^4.0.3",
+    "marked": "^12.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.30",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
