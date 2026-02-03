@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "build:pages": "npm run build && node dist/generate.js",
-    "preview": "npx serve site"
+    "preview": "tsx src/preview.ts"
   },
   "dependencies": {
     "express": "^4.19.2",

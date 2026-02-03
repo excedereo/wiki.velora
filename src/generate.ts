@@ -201,19 +201,32 @@ function findSectionForIndexPage(tree: SectionNode, page: PageNode): SectionNode
 
 function renderSectionListing(sec: SectionNode): string {
   const esc = escapeHtml;
-  const items: string[] = [];
+  const cards: string[] = [];
+
   for (const ch of sec.children) {
     if (ch.type === "page") {
-      // skip index page duplicate
       if (sec.indexPage && sec.indexPage.filePath === ch.filePath) continue;
-      items.push(`<li class="section-item page"><a href="${esc(prettyHref(ch.path))}">${esc(ch.title)}</a></li>`);
+
+      const href = prettyHref(ch.path);
+      cards.push(
+          `<a class="sec-card" href="${esc(href)}">` +
+          `<div class="sec-top"><span class="sec-badge">СТРАНИЦА</span><span class="sec-meta">${esc(ch.slug)}</span></div>` +
+          `<div class="sec-title">${esc(ch.title)}</div>` +
+          `</a>`
+      );
     } else {
-      const link = ch.indexPage ? prettyHref(ch.indexPage.path) : prettyHref(ch.path);
-      items.push(`<li class="section-item section"><a href="${esc(link)}">${esc(ch.title)}</a></li>`);
+      const href = ch.indexPage ? prettyHref(ch.indexPage.path) : prettyHref(ch.path);
+      cards.push(
+          `<a class="sec-card" href="${esc(href)}">` +
+          `<div class="sec-top"><span class="sec-badge">РАЗДЕЛ</span><span class="sec-meta">${esc(ch.slug)}</span></div>` +
+          `<div class="sec-title">${esc(ch.title)}</div>` +
+          `</a>`
+      );
     }
   }
-  if (!items.length) return "";
-  return `<section class="section-list"><h2>Содержание</h2><ul>${items.join("")}</ul></section>`;
+
+  if (!cards.length) return "";
+  return `<section class="sec-list"><div class="sec-head">Содержание</div><div class="sec-grid">${cards.join("")}</div></section>`;
 }
 
 function renderNav(tree: SectionNode, activePath: string = ""): string {
@@ -230,27 +243,65 @@ function renderNav(tree: SectionNode, activePath: string = ""): string {
     return "folder";
   }
 
-  function renderSection(sec: SectionNode): string {
-    const raw = typeof sec.meta?.icon === "string" ? String(sec.meta.icon).trim() : "";
-    const icon = raw ? renderIconAny(raw, "nav-icon") : `<span class="nav-icon" aria-hidden="true">${iconSvg(inferIconName(sec.slug, sec.title))}</span>`;
-
-    const link = sec.indexPage ? prettyHref(sec.indexPage.path) : prettyHref(sec.path);
-    const isActive = active === decodeURIComponent((sec.indexPage ? sec.indexPage.path : sec.path).replace(/\/$/, ""));
-    const childHtml: string[] = [];
-    for (const ch of sec.children) {
-      if (ch.type === "page") {
-        const pActive = active === decodeURIComponent(ch.path.replace(/\/$/, ""));
-        childHtml.push(`<li class="nav-item ${pActive ? "active" : ""}"><a href="${esc(prettyHref(ch.path))}">${esc(ch.title)}</a></li>`);
-      } else {
-        childHtml.push(renderSection(ch));
-      }
-    }
-    const inner = childHtml.length ? `<ul class="nav-list">${childHtml.join("")}</ul>` : "";
-    return `<li class="nav-section ${isActive ? "active" : ""}"><a class="nav-section-link" href="${esc(link)}">${icon}<span class="nav-label">${esc(sec.title)}</span></a>${inner}</li>`;
+  function inferPageIconName(slug: string, title: string): string {
+    const s = (slug || "").toLowerCase();
+    const t = (title || "").toLowerCase();
+    if (s.includes("install") || t.includes("установ")) return "spark";
+    if (s.includes("faq") || t.includes("вопрос")) return "file";
+    return "file";
   }
 
-  const top = (tree.children as any[]).map(n => n.type === "section" ? renderSection(n as SectionNode) : "").join("");
-  return `<nav class="nav"><ul class="nav-list">${top}</ul></nav>`;
+  function renderIcon(node: SectionNode): string {
+    const raw = typeof node.meta?.icon === "string" ? String(node.meta.icon).trim() : "";
+    if (raw) return renderIconAny(raw, "nav-icon");
+    return `<span class="nav-icon" aria-hidden="true">${iconSvg(inferIconName(node.slug, node.title))}</span>`;
+  }
+
+  function renderPageIcon(node: PageNode): string {
+    const raw = typeof node.meta?.icon === "string" ? String(node.meta.icon).trim() : "";
+    if (raw) return renderIconAny(raw, "nav-icon");
+    return `<span class="nav-icon" aria-hidden="true">${iconSvg(inferPageIconName(node.slug, node.title))}</span>`;
+  }
+
+  function link(title: string, href: string, depth: number, cls: string, extra: string = "") {
+    const outHref = prettyHref(href);
+    return `<a class="nav-link ${cls} d-${depth}" href="${esc(outHref)}">${extra}<span class="nav-text">${esc(title)}</span></a>`;
+  }
+
+  function sectionHead(node: SectionNode, depth: number, isOpen: boolean, hasKids: boolean) {
+    const caret = hasKids
+        ? `<span class="nav-caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5.5 16 12l-7 6.5"/></svg></span>`
+        : "";
+    const ariaExpanded = hasKids ? ` aria-expanded="${isOpen ? "true" : "false"}"` : "";
+    const href = node.indexPage ? node.indexPage.path : node.path; // важно: клик ведёт на index
+    return `<a class="nav-link nav-section d-${depth}" href="${esc(prettyHref(href))}" data-nav-section="${encodeURI(node.path)}"${ariaExpanded}>${renderIcon(node)}<span class="nav-text">${esc(node.title)}</span>${caret}</a>`;
+  }
+
+  function label(title: string, depth: number) {
+    return `<div class="nav-link nav-label d-${depth}"><span class="nav-text">${esc(title)}</span></div>`;
+  }
+
+  function nodeHtml(node: SectionNode | PageNode, depth: number): string {
+    if (node.type === "page") return link(node.title, node.path, depth, "nav-page", renderPageIcon(node));
+
+    const hasKids = node.children.length > 0;
+    const isOpen = !!active && (active === node.path || active.startsWith(node.path + "/"));
+
+    const head = node.indexPage
+        ? sectionHead(node, depth, isOpen, hasKids)
+        : label(node.title, depth);
+
+    const kids = node.children.map(c => nodeHtml(c, depth + 1)).join("");
+    const kidsWrap = kids ? `<div class="nav-children">${kids}</div>` : "";
+
+    const stateCls = hasKids ? (isOpen ? "is-open" : "is-collapsed") : "is-leaf";
+    const wrap = `<div class="nav-item ${stateCls}" data-nav-path="${encodeURI(node.path)}">${head}${kidsWrap}</div>`;
+
+    if (depth === 0) return `<div class="nav-block">${wrap}</div>`;
+    return wrap;
+  }
+
+  return `<nav class="nav">${tree.children.map(n => nodeHtml(n, 0)).join("")}</nav>`;
 }
 
 // ---------- file writing ----------
