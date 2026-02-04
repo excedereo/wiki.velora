@@ -3,7 +3,7 @@ title: "Правила"
 desc: ""
 order: 1
 header: /assets/headers/rules.png
-icon: /assets/icons/info.svg
+icon: /assets/icons/book.svg
 headerHeight: 260
 ---
 

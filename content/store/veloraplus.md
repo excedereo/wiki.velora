@@ -5,6 +5,8 @@ order: 0
 header: /assets/headers/veloraplus.png
 icon: /assets/icons/golden_apple.png
 ---
+**Velora+** — это добровольное ежемесячное (или другой переодичности) пожертвование.
+В знак благодарности участник получает доступ к дополнительным возможностям и привилегиям.
 
 Стоимость:
 - 1 Месяц - <#d69e2c>99.00 ₽</#d69e2c>
@@ -13,10 +15,6 @@ icon: /assets/icons/golden_apple.png
 - Навсегда - <#f5d86c>499.00 ₽</#f5d86c> <#747d89>~~699.00 ₽~~</#747d89> 
 
 ### Основные преимущества Velora+
-
-```gallery
-/assets/veloraplus/gradnick.png | Gradient nick
-```
 
 ## <#5bec6c> 1. Уникальный префикс в табе/чате </#5bec6c>
 ```image

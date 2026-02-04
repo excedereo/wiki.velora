@@ -1,3 +1,4 @@
+// gallery.js (без import.meta, можно подключать обычным <script>)
 (() => {
   // Arrow icon based on provided Frame 17.svg (this is the button shape)
   function svgArrow(dir) {
@@ -9,23 +10,64 @@
     `;
   }
 
+  function normalizeSrc(src) {
+    if (!src) return "";
+    src = String(src).trim();
+    // keep absolute URLs / data / blob as-is
+    if (/^(https?:)?\/\//i.test(src) || /^data:/i.test(src) || /^blob:/i.test(src)) return src;
+    // IMPORTANT: make it base-href relative (works with /wiki.velora/ in preview/build)
+    if (src.startsWith("/")) src = src.slice(1);
+    if (src.startsWith("./")) src = src.slice(2);
+    return src;
+  }
+
+  function normalizeWidth(w) {
+    if (!w) return "";
+    w = String(w).trim();
+    w = w.replace(/^width\s*[:=]\s*/i, "");
+    if (/^\d+(\.\d+)?$/.test(w)) return `${w}px`;
+    return w;
+  }
+
+  function normalizeAlign(a) {
+    if (!a) return "";
+    a = String(a).trim().toLowerCase();
+    a = a.replace(/^align\s*[:=]\s*/i, "");
+    if (a === "left" || a === "center" || a === "right") return a;
+    return "";
+  }
+
+  function applyLayout(el, align, width) {
+    el.classList.remove("align-left", "align-center", "align-right");
+    el.classList.add(`align-${align || "center"}`);
+
+    const w = normalizeWidth(width);
+    if (w) {
+      el.style.width = w;
+      el.style.maxWidth = "100%";
+    } else {
+      el.style.width = "";
+      el.style.maxWidth = "";
+    }
+  }
+
   function mount(el) {
     if (el.getAttribute("data-wgallery-mounted") === "1") return;
     el.setAttribute("data-wgallery-mounted", "1");
+
     const itemsEnc = el.getAttribute("data-items") || "";
     let items = [];
-    try { items = JSON.parse(decodeURIComponent(itemsEnc)); } catch {}
+    try {
+      items = JSON.parse(decodeURIComponent(itemsEnc));
+    } catch {}
 
     if (!Array.isArray(items) || items.length === 0) {
       el.innerHTML = `<div class="wgallery-empty">Gallery: no images</div>`;
       return;
     }
 
-    const align = el.getAttribute("data-align") || "center";
-    const width = el.getAttribute("data-width") || "";
-
-    el.classList.add(`align-${align}`);
-    if (width) el.style.maxWidth = `${Number(width)}px`;
+    const defaultAlign = normalizeAlign(el.getAttribute("data-align")) || "center";
+    const defaultWidth = normalizeWidth(el.getAttribute("data-width") || "");
 
     let index = 0;
     let showA = true;
@@ -83,19 +125,23 @@
       viewport.style.aspectRatio = `${w} / ${h}`;
     }
 
+    function applyForItem(it) {
+      const align = normalizeAlign(it && it.align) || defaultAlign;
+      const width = normalizeWidth(it && it.width) || defaultWidth;
+      applyLayout(el, align, width);
+    }
+
     function preload(i) {
       const it = items[(i + items.length) % items.length];
       if (!it || !it.src) return;
       const im = new Image();
       im.decoding = "async";
       im.loading = "eager";
-      im.src = it.src;
+      im.src = normalizeSrc(it.src);
     }
 
     function startTransition(incoming, outgoing) {
-      // Ensure the browser registers the initial shifted/hidden state
       incoming.classList.remove("is-active");
-      // Flush layout so cached images still animate (prevents 'jump cut')
       void incoming.offsetWidth;
       requestAnimationFrame(() => {
         outgoing.classList.remove("is-active");
@@ -112,7 +158,6 @@
     }
 
     function waitReady(img) {
-      // decode() forces async decode; good for cached images too
       if (img.decode) return img.decode().catch(() => {});
       return new Promise((resolve) => {
         if (img.complete && img.naturalWidth) return resolve();
@@ -129,15 +174,16 @@
       index = (i + items.length) % items.length;
       const it = items[index];
 
+      applyForItem(it);
+
       const incoming = showA ? imgB : imgA;
       const outgoing = showA ? imgA : imgB;
 
-      // Small slide + fade (subtle, not a full swipe)
       incoming.style.setProperty("--shift", dir > 0 ? "18px" : "-18px");
       outgoing.style.setProperty("--shift", dir > 0 ? "-18px" : "18px");
 
       incoming.classList.remove("is-active");
-      incoming.src = it.src;
+      incoming.src = normalizeSrc(it.src);
       incoming.alt = it.caption ? it.caption : `Image ${index + 1}`;
       cap.textContent = it.caption || "";
 
@@ -149,8 +195,7 @@
         setAspectFrom(incoming);
         startTransition(incoming, outgoing);
 
-        // Release the lock on transition end (with a safe fallback)
-        const fallbackMs = 820; // must be > CSS duration
+        const fallbackMs = 820;
         let done = false;
 
         const finalize = () => {
@@ -160,12 +205,12 @@
         };
 
         incoming.addEventListener(
-          "transitionend",
-          (e) => {
-            if (e && e.target !== incoming) return;
-            finalize();
-          },
-          { once: true }
+            "transitionend",
+            (e) => {
+              if (e && e.target !== incoming) return;
+              finalize();
+            },
+            { once: true }
         );
 
         setTimeout(finalize, fallbackMs);
@@ -185,7 +230,8 @@
 
     // Initial render without animation
     const first = items[0];
-    imgA.src = first.src;
+    applyForItem(first);
+    imgA.src = normalizeSrc(first.src);
     imgA.alt = first.caption ? first.caption : "Image 1";
     cap.textContent = first.caption || "";
     imgA.classList.add("is-active");
@@ -204,7 +250,9 @@
     document.querySelectorAll(".wgallery").forEach(mount);
   }
 
-  try { window.WGALLERY_INIT = init; } catch {}
+  try {
+    window.WGALLERY_INIT = init;
+  } catch {}
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
