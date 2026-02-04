@@ -6,21 +6,24 @@
   <meta name="theme-color" content="#0b0f17" />
   <title>{{title}}</title>
 
+  <!-- Fix asset paths on nested routes (e.g. /home/) when deployed under a base path -->
+  <base href="{{base}}" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Modular stylesheets -->
-  <link rel="stylesheet" href="{{base}}css/base.css" />
-  <link rel="stylesheet" href="{{base}}css/layout.css" />
-  <link rel="stylesheet" href="{{base}}css/nav.css" />
-  <link rel="stylesheet" href="{{base}}css/page.css" />
-  <link rel="stylesheet" href="{{base}}css/section-list.css" />
-  <link rel="stylesheet" href="{{base}}css/gallery.css" />
-  <link rel="stylesheet" href="{{base}}css/download.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="css/page.css" />
+  <link rel="stylesheet" href="css/section-list.css" />
+  <link rel="stylesheet" href="css/gallery.css" />
+  <link rel="stylesheet" href="css/download.css" />
 
-  <script src="{{base}}app.js" defer></script>
-  <script src="{{base}}widgets/gallery.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="widgets/gallery.js" defer></script>
 </head>
 <body data-base="{{base}}">
   <!-- class kept for backward compatibility; hidden by base.css -->
@@ -30,7 +33,7 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-top">
         <a class="brand" href="{{base}}" title="На главную">
-          <img class="brand-logo" src="{{base}}assets/logo-color.svg" alt="Logo" />
+          <img class="brand-logo" src="assets/logo-color.svg" alt="Logo" />
           <span class="brand-text">Velora Wiki</span>
         </a>
 

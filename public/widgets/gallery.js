@@ -13,12 +13,20 @@
   function normalizeSrc(src) {
     if (!src) return "";
     src = String(src).trim();
+
+    // Accept markdown list-style lines like "- /assets/x.png"
+    src = src.replace(/^[-*]\s+/, "");
     // keep absolute URLs / data / blob as-is
     if (/^(https?:)?\/\//i.test(src) || /^data:/i.test(src) || /^blob:/i.test(src)) return src;
-    // IMPORTANT: make it base-href relative (works with /wiki.velora/ in preview/build)
-    if (src.startsWith("/")) src = src.slice(1);
-    if (src.startsWith("./")) src = src.slice(2);
-    return src;
+    // IMPORTANT: resolve against site base (works for /help/... pages and GitHub Pages subpaths)
+    const base = (document.body && document.body.getAttribute("data-base"))
+      ? String(document.body.getAttribute("data-base"))
+      : "/";
+    const baseNorm = base.endsWith("/") ? base : (base + "/");
+
+    if (src.startsWith("/")) return baseNorm + src.slice(1);
+    if (src.startsWith("./")) return baseNorm + src.slice(2);
+    return baseNorm + src;
   }
 
   function normalizeWidth(w) {

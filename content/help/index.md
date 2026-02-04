@@ -63,7 +63,7 @@ text: Текст
 ## 6. Обычные изображения
 
 ```image
-src: /assets/pics/photo.png
+src: /assets/gallery/one.png
 align: center
 width: 60%
 caption: Подпись
@@ -72,14 +72,14 @@ caption: Подпись
 ## 7. Галерея
 
 ```gallery
-- /assets/gallery/1.png
-- /assets/gallery/2.png
+- /assets/gallery/one.png
+- /assets/gallery/two.png
 ```
 
 ## 8. Инлайн элементы
 
 [[icon:idea|h=16]]  
-[[img:/assets/pics/logo.png|h=18]]
+[[img:/assets/logo-color.svg|h=18]]
 
 ## 9. Градиентный текст
 

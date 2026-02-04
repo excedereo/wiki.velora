@@ -18,14 +18,19 @@ export function renderGalleryBlock(raw: string, defaults?: { width?: string; ali
     const line = line0.trim();
     if (!line) continue;
 
+    // Allow markdown list syntax inside the fenced block:
+    //   - /assets/gallery/one.png | Caption
+    //   * /assets/gallery/two.png
+    const lineNoBullet = line.replace(/^[-*]\s+/, "");
+
     // optional defaults inside the block:
-    const mAlign = line.match(/^align\s*:\s*(left|center|right)\s*$/i);
+    const mAlign = lineNoBullet.match(/^align\s*:\s*(left|center|right)\s*$/i);
     if (mAlign) { defaultAlign = mAlign[1].toLowerCase(); continue; }
 
-    const mWidth = line.match(/^width\s*:\s*(.+)\s*$/i);
+    const mWidth = lineNoBullet.match(/^width\s*:\s*(.+)\s*$/i);
     if (mWidth) { defaultWidth = mWidth[1].trim(); continue; }
 
-    const parts = line.split("|").map(s => s.trim());
+    const parts = lineNoBullet.split("|").map(s => s.trim());
     const src = parts[0];
     if (!src) continue;
 

@@ -110,6 +110,21 @@
 
 .nav-item.is-open > .nav-link .nav-caret{ transform: rotate(90deg); }
 
+/* Caret positioning/visibility (fix: in search menu the arrow could disappear / wrap) */
+.nav-caret{
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+  opacity: .92;
+  transition: transform 140ms ease;
+}
+.nav-caret svg{ width: 18px; height: 18px; }
+
 /* Sidebar search */
 .sidebar-search{ padding: 4px 4px 10px 4px; }
 .nav-search{
@@ -131,5 +146,3 @@ html[data-theme="light"] .nav-search{ background: rgba(255,255,255,0.92); }
   box-shadow: 0 0 0 3px rgba(52,211,153,0.12);
 }
 .shell.is-collapsed .sidebar-search{ display:none; }
-.nav-caret { display: inline-flex !important; }
-.nav-caret svg { display: block; }
