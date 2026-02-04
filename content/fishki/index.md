@@ -1,8 +1,7 @@
 ---
 title: "Фишки Сервера"
 desc: ""
-order: 1
-icon: spark
+order: 3
 header: /assets/headers/demo-header.png
 headerHeight: 220
 headerFit: cover

@@ -6,12 +6,17 @@ header: /assets/headers/veloraplus.png
 icon: /assets/icons/golden_apple.png
 ---
 
-```image
-src: /assets/veloraplus/price.png
-align: left
-```
+Стоимость:
+- 1 Месяц - <#d69e2c>99.00 ₽</#d69e2c>
+- 3 Месяца - <#d69e2c>199.00 ₽</#d69e2c>
+- 6 Месяцев - <#d69e2c>299.00 ₽</#d69e2c>
+- Навсегда - <#f5d86c>499.00 ₽</#f5d86c> <#747d89>~~699.00 ₽~~</#747d89> 
 
-Основные преимущества Velora+
+### Основные преимущества Velora+
+
+```gallery
+/assets/veloraplus/gradnick.png | Gradient nick
+```
 
 ## <#5bec6c> 1. Уникальный префикс в табе/чате </#5bec6c>
 ```image

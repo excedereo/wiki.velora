@@ -107,18 +107,7 @@
 .nav-icon svg{ width: 18px; height: 18px; }
 .nav-icon img{ width: 18px; height: 18px; object-fit: contain; }
 
-.nav-caret{
-  margin-left: auto;
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  color: var(--muted);
-  opacity: .8;
-  transition: transform 160ms ease;
-}
+
 .nav-item.is-open > .nav-link .nav-caret{ transform: rotate(90deg); }
 
 /* Sidebar search */
@@ -142,3 +131,5 @@ html[data-theme="light"] .nav-search{ background: rgba(255,255,255,0.92); }
   box-shadow: 0 0 0 3px rgba(52,211,153,0.12);
 }
 .shell.is-collapsed .sidebar-search{ display:none; }
+.nav-caret { display: inline-flex !important; }
+.nav-caret svg { display: block; }

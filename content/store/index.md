@@ -1,7 +1,7 @@
 ---
 title: "Услуги"
 desc: ""
-order: 0
+order: 2
 icon: /assets/icons/cart.svg
 ---
 
