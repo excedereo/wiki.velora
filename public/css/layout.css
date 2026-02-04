@@ -258,6 +258,47 @@ html[data-theme="light"] .hudbar{
 }
 .muted{ color: var(--muted); font-size: 12px; }
 
+/* Prevent the page from generating horizontal scrollbars.  On some
+ * mobile pages the combination of negative margins and long
+ * breadcrumb strings can cause the document to overflow the
+ * viewport horizontally.  By explicitly hiding horizontal
+ * overflow on the html/body we avoid unsightly side scroll.
+ */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Allow header and description text in the HUD bar to wrap and
+ * truncate properly.  Without these rules long page titles or
+ * breadcrumb paths may force the HUD bar to expand beyond its
+ * container on mobile.  We give flex children the ability to
+ * shrink and wrap as needed.
+ */
+.hudbar-left, .hudbar-right {
+  min-width: 0;
+}
+.hud-where, .hud-title, .hud-desc {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 860px) {
+  /* Allow the hud bar to wrap on small screens rather than
+   * overflowing horizontally.  Right side is pushed to new line
+   * automatically.  Breadcrumbs wrap onto multiple lines.  */
+  .hudbar {
+    flex-wrap: wrap;
+  }
+  .hudbar-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .hud-where {
+    white-space: normal;
+  }
+}
+
 /* Responsive */
 @media (max-width: 860px){
   /* Single-column layout on mobile (no "content shifts left") */

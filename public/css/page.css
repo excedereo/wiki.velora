@@ -241,3 +241,45 @@ html[data-theme="light"] .callout{ background: rgba(2,6,23,0.03); }
     margin: 0 auto 10px auto;
   }
 }
+
+/*
+ * When images are rendered using the ``image`` macro with an explicit width
+ * (e.g. width: 20% or 40%), the inline style applied to the wrapper
+ * element can cause very narrow thumbnails on small screens.  On
+ * narrow viewports we want images to take up the full available
+ * width so that they remain legible.  We override both the width on
+ * the wrapper and the underlying img element here.  See issue raised
+ * by mobile users where pictures appeared tiny on phones.
+ */
+@media (max-width: 900px){
+  .wimage-media{
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .wimage-media img{
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+  }
+  /* remove floats and extra margins on all image alignments */
+  .wimage-media,
+  .wimage{
+    float: none !important;
+  }
+}
+
+/*
+ * Adjust header margins on mobile.  The default desktop styling uses
+ * large negative margins to make the header bleed outside the
+ * cardʼs padding; on phones this creates horizontal overflow and
+ * causes the header to stick out of the card.  Here we reduce the
+ * negative margins so that the header aligns with the card edges
+ * defined by the reduced padding in mobile mode.  See discussion in
+ * https://github.com/excedereo/wiki.velora/issues/?? (user report).
+ */
+@media (max-width: 860px){
+  .page-header{
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+}
