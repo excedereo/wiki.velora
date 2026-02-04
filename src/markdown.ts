@@ -454,7 +454,7 @@ marked.use({
         if (!m) return;
         const raw = m[0];
         const body = m[1];
-        let calloutType: "note" | "warning" | "tip" = "note";
+        let calloutType: "note" | "warning" | "tip" | "error" = "note";
         let title = "";
         let icon = "";
         const contentLines: string[] = [];
@@ -470,7 +470,7 @@ marked.use({
           if (kv) {
             const key = kv[1].toLowerCase();
             const val = kv[2].trim();
-            if (key === "type" && (val === "note" || val === "warning" || val === "tip")) calloutType = val;
+            if (key === "type" && (val === "note" || val === "warning" || val === "tip" || val === "error")) calloutType = val;
             else if (key === "title") title = val;
             else if (key === "icon") icon = val;
             else {

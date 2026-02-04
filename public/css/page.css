@@ -186,6 +186,13 @@ html[data-theme="light"] .callout{ background: rgba(2,6,23,0.03); }
 .callout.note{ border-left: 3px solid rgba(52,211,153,0.55); }
 .callout.tip{ border-left: 3px solid rgba(56,189,248,0.55); }
 .callout.warning{ border-left: 3px solid rgba(251,191,36,0.6); }
+.callout.error{
+  border-left: 3px solid rgba(239,68,68,0.75);
+  background: rgba(239,68,68,0.06);
+}
+html[data-theme="light"] .callout.error{
+  background: rgba(239,68,68,0.08);
+}
 
 /* Header image (front matter: header / headerImage / header_image) */
 .page-header{
