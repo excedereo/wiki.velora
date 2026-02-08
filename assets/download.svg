@@ -1,0 +1,11 @@
+<!--
+  Simple download icon used for the download card widget.  The icon
+  consists of a downward arrow above a horizontal line, indicating a
+  save operation.  The strokes inherit the current color so that the
+  accent colour defined in CSS is applied automatically.
+-->
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v12" />
+  <polyline points="8 11 12 15 16 11" />
+  <line x1="5" y1="19" x2="19" y2="19" />
+</svg>
